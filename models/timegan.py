@@ -6,14 +6,15 @@ from generator import Generator
 from recovery import Recovery
 from supervisor import Supervisor
 from torch import nn, optim
+from torch.utils.data import DataLoader
 
 
-def TimeGAN(data, parameters):
+def TimeGAN(dataset, parameters):
     """
     TimeGAN: Combines all the networks to generate synthetic data
 
     Args:
-      - data: processed input time-series data;
+      - dataset: pytorch dataset containing processed input time-series data;
         np array of shape (num of seq, seq length, dim of each sample)
       - parameters:
 
@@ -21,12 +22,11 @@ def TimeGAN(data, parameters):
       - generated_data: synthetic time-series data
     """
     # Data Parameters
-    num_of_seq, seq_len, dim = np.asarray(data).shape
+    # num_of_seq, seq_len, dim = np.asarray(data).shape
 
     # Network Parameters
     iterations = parameters["iterations"]
     batch_size = parameters["batch_size"]
-    epochs = parameters["epochs"]
     gamma = parameters["gamma"]
     EMBEDDER_LR = 0.001
     RECOVERY_LR = 0.001
@@ -34,7 +34,11 @@ def TimeGAN(data, parameters):
     GENERATOR_LR = 0.001
     DISCRIMINATOR_LR = 0.001
 
-    # Instantiate modules
+    # Calculate number of epochs
+    num_of_batches = int(np.ceil(len(dataset) / batch_size))
+    num_of_epochs = int(iterations / num_of_batches)
+
+    # Instantiate networks
     embedder = Embedder(parameters)
     recovery = Recovery(parameters)
     supervisor = Supervisor(parameters)
@@ -91,27 +95,41 @@ def TimeGAN(data, parameters):
         return D_loss
 
     def train_embedded_network():
-        TODO
+        for i in range(num_of_epochs):
+            train_loader = DataLoader(
+                dataset, batch_size=parameters["batch_size"], shuffle=True
+            )
+            for X in train_loader:
+                return
 
     def train_supervised_loss():
-        TPDP
+        for i in range(num_of_epochs):
+            train_loader = DataLoader(
+                dataset, batch_size=parameters["batch_size"], shuffle=True
+            )
+            for X in train_loader:
+                return
 
     def train_joint():
-        TODO
+        for i in range(num_of_epochs):
+            train_loader = DataLoader(
+                dataset, batch_size=parameters["batch_size"], shuffle=True
+            )
+            for X in train_loader:
+                return
 
     def train_discriminator():
-        TODO
-
-    def normalize_data():
-        TODO
+        for i in range(num_of_epochs):
+            train_loader = DataLoader(
+                dataset, batch_size=parameters["batch_size"], shuffle=True
+            )
+            for X in train_loader:
+                return
 
     def generate_synthetic_data():
-        TODO
+        # TODO
+        pass
 
-    def preprocess_data():
-        TODO
-
-    X = data
     train_embedded_network()
     train_supervised_loss()
     train_joint()
